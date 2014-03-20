@@ -49,10 +49,10 @@
 #define ADF4107_MUXOUT(val) (val << 4)
 #define ADF4107_COUNTER_RESET (1 << 2)
 
-#define ADF4107_REF = 0
-#define ADF4107_AB = 1
-#define ADF4107_FUNC = 2
-#define ADF4107_INIT = 3
+#define ADF4107_REF  0
+#define ADF4107_AB  1
+#define ADF4107_FUNC  2
+#define ADF4107_INIT 3
 
 
 class ADF4107
@@ -63,50 +63,32 @@ class ADF4107
         ADF4107(byte);
 
         
-        //
-        void initialize();
+        // initialize function.
+        // initialize(int P, int B, int A, int R).
+        // final PLL output obeys RF = [(P*B + A)/R]*REF
+        // P: 8, 16, 32, or 64
+        // B: B counter; accepts integer 3-8191 (13 bit). 
+        //    B cannot take values 0, 1, or 2. 
+        // A: A counter; accepts integer 0-63 (6 bit)
+        // R: reference divider. Accepts integer between 
+        //    1 and 16383 inclusive (14 bit)  
+        void initialize(int, int, int, int);
+        
+        // update function. Same as initialize.
+        // Upon initial power-up, should call initialize function. Afterwards,
+        // can use update instead.
+        void update(int, int, int, int);
 
-
-        // powers down the PLL/VCO
-    /*    void powerDown(bool);
-        void setRfPower(int);
-        void setAuxPower(int);
-        void auxEnable(bool);
-        void rfEnable(bool);
-
-        // Gets current frequency
-        int getFreq();
-
-        // Sets frequency
-        void setFreq(int);
-
-        void setInt(int);
-
-        void setFeedbackType(bool);
-
-        void update();
-        */
-
-      //  int _phase;
-       // int _freq, _int, _divider, _refClk, _auxPower, _rfPower;
     private:
         // Instance variables that hold pinout mapping
         byte _ssPin;
-
-        // Instance variables for ...
-      //  bool _powerdown, _auxEnabled, _rfEnabled, _feedbackType;
-
+        
         // register values
-        byte _r0[4], _r1[4], _r2[4];
-
+        int _p, _b, _a, _r;
 
 
         // function to write data to register.
-        void setR0();
-        void setR1();
-        void setR2();
-        void writeRegister(byte[4]);
-
+        void writeRegisterData(unsigned long);
 
 
 };
