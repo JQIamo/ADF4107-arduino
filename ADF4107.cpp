@@ -84,7 +84,9 @@ ADF4107::ADF4107(byte ssPin) {
     digitalWrite(_ssPin, HIGH);
 }
 
-
+void ADF4107::initialize(int P, int B, int A, int R){
+	ADF4107::initialize(P, B, A, R, 1);
+}
 
 // initialize the ADF4107.
 // R: reference divider. Accepts integer between 1 and 16383 inclusive (14 bit)
@@ -92,7 +94,8 @@ ADF4107::ADF4107(byte ssPin) {
 // A: A counter; accepts integer 0-63 (6 bit)
 // B: B counter; accepts integer 3-8191 (13 bit). B cannot take values 0, 1, or 2. 
 // The final multiplier is RF = [(P*B + A)/R]*REF
-void ADF4107::initialize(int P, int B, int A, int R){
+// polarity: lock polarity
+void ADF4107::initialize(int P, int B, int A, int R, int pol){
     int preg;   // prescalar register value
     
     switch (P){
@@ -109,7 +112,10 @@ void ADF4107::initialize(int P, int B, int A, int R){
     }
     
     // construct the function latch
-    unsigned long func =  (preg << 22 | ADF4107_CPI1(1) | ADF4107_CPI2(1) | ADF4107_PDPOL_POS);
+    unsigned long func =  (preg << 22 | ADF4107_CPI1(1) | ADF4107_CPI2(1));
+	if (pol){
+		func |= ADF4107_PDPOL_POS;
+	}
     // construct the Reference counter latch
     unsigned long r = ( ADF4107_REF | ADF4107_ABP(2) | (R << 2));
     // construct the AB counter latch
