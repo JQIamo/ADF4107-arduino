@@ -21,6 +21,7 @@ In your Arduino Sketch, make sure to do something like:
         
         
         DPLL.initialize(P_VAL, B_VAL, A_VAL, R_VAL);
+        // or use  ADF4107::initialize(int P, int B, int A, int R, int pol)
     }
     
 
@@ -36,5 +37,7 @@ This function initializes the ADF4107 after initial power-up.
 * R: Reference divider; accepts integer 1-16383 (14 bit).
 
 The final PLL frequency relationship is `RF_FREQ = [(P*B+A)/R]*REF_FREQ`.
+
+If you want to specify a polarity for the PLL, add it as the final flag, eg, `ADF4107::initialize(int P, int B, int A, int R, int pol)` where `pol` is either `0` or `1`.
 
 Enjoy!
