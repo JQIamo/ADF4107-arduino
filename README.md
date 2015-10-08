@@ -39,5 +39,15 @@ This function initializes the ADF4107 after initial power-up.
 The final PLL frequency relationship is `RF_FREQ = [(P*B+A)/R]*REF_FREQ`.
 
 If you want to specify a polarity for the PLL, add it as the final flag, eg, `ADF4107::initialize(int P, int B, int A, int R, int pol)` where `pol` is either `0` or `1`.
+You can also specify what you want to be sent to the mux pin by adding a further flag i.e. `ADF4107::initialize(int P, int B, int A, int R, int pol, int mux)` where 'mux' may take values from '0' to '7' corresponding to:
+
+'0' - Three state output
+'1' - Digital lock detect (output high)
+'2' - N divider output
+'3' - DV_{DD}
+'4' - R divider output
+'5' - N channel open-drain lock detect
+'6' - Serial data output
+'7' - DGND
 
 Enjoy!
