@@ -73,8 +73,10 @@ class ADF4107
         // R: reference divider. Accepts integer between 
         //    1 and 16383 inclusive (14 bit)  
         void initialize(int, int, int, int);
-		// , pol
+		// with pol
 		void initialize(int, int, int, int, int);
+		// with pol and mux
+		void initialize(int, int, int, int, int, int);
         
         // update function. Same as initialize.
         // Upon initial power-up, should call initialize function. Afterwards,

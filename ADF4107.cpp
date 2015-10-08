@@ -1,6 +1,7 @@
 /* 
    ADF4107.cpp - ADF4107 PLL Communication Library
    Created by Neal Pisenti, 2014.
+   Some additions by Sandy Craddock (marked by SC)
    JQI - Strontium - UMD
 
    This program is free software: you can redistribute it and/or modify
@@ -85,7 +86,13 @@ ADF4107::ADF4107(byte ssPin) {
 }
 
 void ADF4107::initialize(int P, int B, int A, int R){
-	ADF4107::initialize(P, B, A, R, 1);
+	// Defaults to the mux providing N divider output and polarity of 1, used for locking the slave laser to the blue of the master
+	ADF4107::initialize(P, B, A, R, 1, 2);
+}
+
+void ADF4107::initialize(int P, int B, int A, int R, int pol){
+	// Defaults to the mux providing N divider output
+	ADF4107::initialize(P, B, A, R, pol, 2);
 }
 
 // initialize the ADF4107.
@@ -95,24 +102,31 @@ void ADF4107::initialize(int P, int B, int A, int R){
 // B: B counter; accepts integer 3-8191 (13 bit). B cannot take values 0, 1, or 2. 
 // The final multiplier is RF = [(P*B + A)/R]*REF
 // polarity: lock polarity
-void ADF4107::initialize(int P, int B, int A, int R, int pol){
+// mux: what is sent to mux pin - SC
+void ADF4107::initialize(int P, int B, int A, int R, int pol, int mux){
     int preg;   // prescalar register value
     
+	// Have added breaks in for all cases as preg was defaulting to 0 every time - SC
     switch (P){
     case 8:
         preg = 0;
+		break;
     case 16:
         preg = 1;
+		break;
     case 32:
         preg = 2;
+		break;
     case 64:
         preg = 3;
+		break;
     default:
         preg = 0;
+		break;
     }
     
     // construct the function latch
-    unsigned long func =  (preg << 22 | ADF4107_CPI1(1) | ADF4107_CPI2(1));
+    unsigned long func =  ((preg << 22) | ADF4107_CPI1(1) | ADF4107_CPI2(1) | (mux << 4));
 	if (pol){
 		func |= ADF4107_PDPOL_POS;
 	}
@@ -144,17 +158,23 @@ void ADF4107::initialize(int P, int B, int A, int R, int pol){
 void ADF4107::update(int P, int B, int A, int R){
     int preg;   // prescalar register value
     
+	// Have added breaks in for all cases as preg was defaulting to 0 every time - SC
     switch (P){
     case 8:
         preg = 0;
+		break;
     case 16:
         preg = 1;
+		break;
     case 32:
         preg = 2;
+		break;
     case 64:
         preg = 3;
+		break;
     default:
         preg = 0;
+		break;
     }
     
     // construct the function latch
