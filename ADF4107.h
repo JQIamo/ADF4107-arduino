@@ -64,15 +64,15 @@ class ADF4107
     // A: A counter; accepts integer 0-63 (6 bit)
     // R: reference divider. Accepts integer between
     //    1 and 16383 inclusive (14 bit)
-    void initialize(int P, int B, int A, int R);
+    void initialize(uint P, uint B, uint A, uint R);
 		// with pol
-		void initialize(int P, int B, int A, int R, int pol);
+		void initialize(uint P, uint B, uint A, uint R, uint pol);
 		// with pol and mux
-		void initialize(int P, int B, int A, int R, int pol, int mux);
+		void initialize(uint P, uint B, uint A, uint R, uint pol, uint mux);
     // update function. Same as initialize.
     // Upon initial power-up, should call initialize function. Afterwards,
     // can use update instead.
-    void update(int P, int B, int A, int R, int pol = 1);
+    void update(uint P, uint B, uint A, uint R, uint pol = 1);
 
   private:
     // Instance variables that hold pinout mapping

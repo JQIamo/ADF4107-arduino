@@ -75,12 +75,12 @@ ADF4107::ADF4107(byte ssPin) {
   digitalWrite(_ssPin, HIGH);
 }
 
-void ADF4107::initialize(int P, int B, int A, int R){
+void ADF4107::initialize(uint P, uint B, uint A, uint R){
 	// Defaults to the mux providing N divider output and polarity of 1, used for locking the slave laser to the blue of the master
 	ADF4107::initialize(P, B, A, R, 1, 2);
 }
 
-void ADF4107::initialize(int P, int B, int A, int R, int pol){
+void ADF4107::initialize(uint P, uint B, uint A, uint R, uint pol){
 	// Defaults to the mux providing N divider output
 	ADF4107::initialize(P, B, A, R, pol, 2);
 }
@@ -93,7 +93,7 @@ void ADF4107::initialize(int P, int B, int A, int R, int pol){
 // The final multiplier is RF = [(P*B + A)/R]*REF
 // polarity: lock polarity
 // mux: what is sent to mux pin - SC
-void ADF4107::initialize(int P, int B, int A, int R, int pol, int mux){
+void ADF4107::initialize(uint P, uint B, uint A, uint R, uint pol, uint mux){
   int preg;   // prescalar register value
   // Have added breaks in for all cases as preg was defaulting to 0 every time - SC
   switch (P){
@@ -114,7 +114,7 @@ void ADF4107::initialize(int P, int B, int A, int R, int pol, int mux){
 		break;
   }
   // construct the function latch
-  unsigned long func = ((preg << 22) | ADF4107_CPI1(1) | ADF4107_CPI2(1) | (mux << 4));
+  unsigned long func = ((preg << 22) | ADF4107_CPI1(0) | ADF4107_CPI2(0) | (mux << 4));
 	if (pol){
 		func |= ADF4107_PDPOL_POS;
 	}
@@ -141,7 +141,7 @@ void ADF4107::initialize(int P, int B, int A, int R, int pol, int mux){
 // A: A counter; accepts integer 0-63 (6 bit)
 // B: B counter; accepts integer 3-8191 (13 bit). B cannot take values 0, 1, or 2.
 // The final multiplier is RF = [(P*B + A)/R]*REF
-void ADF4107::update(int P, int B, int A, int R, int pol){
+void ADF4107::update(uint P, uint B, uint A, uint R, uint pol){
   int preg;   // prescalar register value
 	// Have added breaks in for all cases as preg was defaulting to 0 every time - SC
   switch (P){
